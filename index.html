@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Página Online</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto & AI Terminal | Solochegui</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { color: #38bdf8; }
+        p { color: #94a3b8; }
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <body>
-    <h1>¡Hola Mundo desde Termux!</h1>
-    <p>Esta es mi página online publicada con GitHub.</p>
+    <h1>🚀 Terminal Crypto & AI</h1>
+    <p>Página alojada desde Termux & GitHub Pages</p>
+
+    <div class="card">
+        <h2>Mercado en Vivo</h2>
+        <!-- Widget de TradingView -->
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+          "symbol": "BINANCE:BTCUSDT",
+          "width": "100%",
+          "colorTheme": "dark",
+          "isTransparent": true,
+          "locale": "es"
+        }
+          </script>
+        </div>
+    </div>
 </body>
 </html>
