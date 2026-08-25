@@ -3,47 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto & AI Terminal | Solochegui</title>
+    <title>Chegüi | Game Hub & Crypto Terminal</title>
+    
+    <!-- CSS Estilos Integrados -->
     <style>
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
+        /* === CONFIGURACIÓN DE COLORES Y VARIABLES === */
+        :root {
+            --bg-color: #0f172a;       /* Fondo oscuro principal */
+            --card-bg: #1e293b;        /* Fondo de tarjetas/bloques */
+            --text-color: #f8fafc;     /* Texto claro */
+            --accent-green: #10b981;   /* Neón verde */
+            --accent-blue: #3b82f6;    /* Neón azul */
+            --accent-purple: #8b5cf6;  /* Neón púrpura */
+            --border-color: #334155;  /* Color de bordes */
         }
-        h1 { color: #38bdf8; }
-        p { color: #94a3b8; }
-        .card {
-            background: #1e293b;
+
+        /* RESETEO BÁSICO */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 10px;
+            border-bottom: 2px solid var(--accent-blue);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            padding: 5px 12px;
             border-radius: 12px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            border: 1px solid var(--accent-green);
+        }
+
+        /* LAYOUT PRINCIPAL */
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* === SECCIÓN DE JUEGO ONLINE === */
+        .game-container {
+            position: relative;
+            width: 100%;
+            /* Proporción 16:9 para adaptarse a pantallas móviles y desktop */
+            padding-bottom: 56.25%; 
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid var(--accent-purple);
+            background-color: #000;
+        }
+
+        .game-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* === MONITOR CRYPTO (WIDGET TRADINGVIEW) === */
+        .crypto-widget {
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* === SECCIÓN DE HERRAMIENTAS Y PROYECTOS === */
+        .grid-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .project-item {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .project-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-blue);
+        }
+
+        .project-item h3 {
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .project-item p {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        /* === FOOTER === */
+        footer {
+            margin-top: auto;
+            padding-top: 30px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>🚀 Terminal Crypto & AI</h1>
-    <p>Página alojada desde Termux & GitHub Pages</p>
 
-    <div class="card">
-        <h2>Mercado en Vivo</h2>
-        <!-- Widget de TradingView -->
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-          {
-          "symbol": "BINANCE:BTCUSDT",
-          "width": "100%",
-          "colorTheme": "dark",
-          "isTransparent": true,
-          "locale": "es"
-        }
-          </script>
-        </div>
-    </div>
+    <!-- HERO / ENCABEZADO -->
+    <header>
+        <h1>Terminal Crypto & AI</h1>
+        <p class="subtitle">Non Fungible Metaverse | BoriCoin Ecosystem</p>
+        <div class="status-badge">● Sistema Operativo &amp; Servidor Activo</div>
+    </header>
+
+    <main>
+        <!-- SECCIÓN 1: JUEGO ONLINE EN VIVO -->
+        <section class="card">
+            <h2 class="card-title">🎮 Arcade Online Center</h2>
+            <div class="game-container">
+                <!-- Reemplaza el atributo 'src' por la URL directa de tu juego alojado en HTML5/WebGL -->
+                <iframe src="https://gamedistribution.com/games/421356-pacman" allowfullscreen="true"></iframe>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: MONITOR CRYPTO EN VIVO (TRADINGVIEW) -->
+        <section class="card">
+            <h2 class="card-title">📊 Monitor de Mercado Crypto</h2>
+            <div class="crypto-widget">
+                <!-- Widget embebido de TradingView -->
+                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                    <div id="tradingview_chart" style="height:calc(100% - 32px);width:100%"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                    <script type="text/javascript">
+                    new TradingView.widget({
+                        "autosize": true,
+                        "symbol": "BINANCE:SOLUSDT",
+                        "interval": "60",
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "es",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "container_id": "tradingview_chart"
+                    });
+                    </script>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: PROYECTOS Y HERRAMIENTAS -->
+        <section class="card">
+            <h2 class="card-title">⚙️ Proyectos &amp; Entorno Termux</h2>
+            <div class="grid-projects">
+                <!-- Tarjeta 1 -->
+                <div class="project-item">
+                    <h3>BoriCoin Project</h3>
+                    <p>Infraestructura descentralizada e innovación en la red Solana.</p>
+                </div>
+                <!-- Tarjeta 2 -->
+                <div class="project-item">
+                    <h3>Non Fungible Metaverse</h3>
+                    <p>Estrategias de inversión, assets digitales e integración Web3.</p>
+                </div>
+                <!-- Tarjeta 3 -->
+                <div class="project-item">
+                    <h3>Cryptohopper Automation</h3>
+                    <p>Estrategias automatizadas en Coinbase Advanced y algoritmos custom en Termux.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>© 2026 solochegui. Desarrollado desde Termux y alojado en GitHub Pages.</p>
+        <p>Perfil oficial: <a href="https://github.com/solochegui" target="_blank">github.com/solochegui</a></p>
+    </footer>
+
 </body>
 </html>
