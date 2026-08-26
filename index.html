@@ -3,397 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Non Fungible Metaverse | NFT News & Terminal</title>
-    
+    <title>Guía: Mi Página Online con Termux y GitHub</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
             --text-color: #f8fafc;
-            --neon-green: #10b981;
-            --neon-blue: #3b82f6;
-            --neon-purple: #a855f7;
-            --neon-gold: #f59e0b;
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --muted-text: #94a3b8;
+            --code-bg: #090d16;
+            --green-accent: #4ade80;
         }
 
         body {
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 70%);
             color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 15px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px 15px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         header {
             text-align: center;
-            padding: 30px 10px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            border-bottom: 1px solid #334155;
             margin-bottom: 30px;
-            position: relative;
         }
 
         h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
 
-        .subtitle {
-            font-size: 0.95rem;
-            color: #94a3b8;
-            margin-top: 8px;
+        p.subtitle {
+            color: var(--muted-text);
+            font-size: 1.1rem;
         }
 
-        .status-badge {
-            display: inline-block;
-            background: rgba(168, 85, 247, 0.1);
-            color: var(--neon-purple);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 12px;
-            border: 1px solid var(--neon-purple);
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* FILTROS WEB3 */
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .filter-btn {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
+        .card {
+            background: var(--card-bg);
             border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
         }
 
-        .filter-btn.active, .filter-btn:hover {
-            border-color: var(--neon-purple);
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-            color: #fff;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
-
-        /* GRID ESTILO GALERÍA NFT */
-        .nft-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .nft-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .nft-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
-
-        .nft-card.legendary {
-            border-color: var(--neon-gold);
-        }
-
-        .nft-card.legendary:hover {
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
-        }
-
-        .rarity-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 0.65rem;
-            padding: 4px 8px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .badge-genesis { background: rgba(245, 158, 11, 0.2); color: var(--neon-gold); border: 1px solid var(--neon-gold); }
-        .badge-epic { background: rgba(168, 85, 247, 0.2); color: var(--neon-purple); border: 1px solid var(--neon-purple); }
-        .badge-rare { background: rgba(59, 130, 246, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
-
-        .nft-title {
-            font-size: 1.05rem;
-            color: var(--text-color);
-            margin: 25px 0 10px 0;
-            line-height: 1.3;
-        }
-
-        .nft-desc {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
-
-        .nft-footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #64748b;
-            border-top: 1px solid var(--border-color);
-            padding-top: 10px;
-        }
-
-        /* MONITOR CRYPTO */
-        .widget-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            color: var(--neon-green);
-            margin-bottom: 15px;
+        h2 {
+            color: var(--green-accent);
+            margin-top: 0;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .crypto-widget {
-            height: 400px;
-            border-radius: 12px;
-            overflow: hidden;
+        pre {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid #1e293b;
+        }
+
+        code {
+            color: var(--accent-color);
         }
 
         footer {
-            margin-top: auto;
-            padding: 30px 0 10px 0;
             text-align: center;
-            font-size: 0.85rem;
-            color: #64748b;
-            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: var(--muted-text);
+            font-size: 0.9rem;
         }
 
         footer a {
-            color: var(--neon-blue);
+            color: var(--accent-color);
             text-decoration: none;
         }
     </style>
 </head>
 <body>
 
+<div class="container">
     <header>
-        <h1>Non Fungible Metaverse</h1>
-        <p class="subtitle">BoriCoin Ecosystem & Digital Collectibles Feed</p>
-        <div class="status-badge">● Genesis Gallery Live</div>
+        <h1>🚀 Cómo Publicar tu Página Web Gratis</h1>
+        <p class="subtitle">Guía rápida utilizando <strong>Termux</strong> y <strong>GitHub Pages</strong></p>
     </header>
 
-    <main>
-        <!-- FILTROS DE NOTICIAS DE COLECCIÓN -->
-        <section>
-            <div class="section-title">📡 Web3 Drops & Live News</div>
-            
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterNFTs('ALL', this)">Todas las Piezas</button>
-                <button class="filter-btn" onclick="filterNFTs('BORICOIN', this)">BoriCoin</button>
-                <button class="filter-btn" onclick="filterNFTs('SOL', this)">Solana</button>
-                <button class="filter-btn" onclick="filterNFTs('BTC', this)">Bitcoin</button>
-                <button class="filter-btn" onclick="filterNFTs('ETH', this)">Ethereum</button>
-            </div>
+    <!-- Paso 1 -->
+    <div class="card">
+        <h2><span>1️⃣</span> Crear el Repositorio en GitHub</h2>
+        <p>Abre GitHub en tu navegador y crea un nuevo repositorio público para alojar tu proyecto.</p>
+        <ul>
+            <li>Nombre del repositorio: <code>paginaonline</code></li>
+            <li>Visibilidad: <strong>Public</strong></li>
+            <li>Haz clic en el botón azul <strong>Create repository</strong>.</li>
+        </ul>
+    </div>
 
-            <div class="nft-grid" id="news-nft-container">
-                <!-- Se genera dinámicamente con estética de Tarjetas NFT -->
-            </div>
-        </section>
+    <!-- Paso 2 -->
+    <div class="card">
+        <h2><span>2️⃣</span> Configurar e Inicializar en Termux</h2>
+        <p>Abre Termux en tu Android, crea tu carpeta de trabajo y genera el archivo principal <code>index.html</code>:</p>
+        <pre><code>cd ~
+mkdir misitio
+cd misitio
+nano index.html</code></pre>
+        <p>Guarda el archivo en nano (<code>CTRL + o</code>, <code>Enter</code>, <code>CTRL + x</code>) e inicializa el repositorio:</p>
+        <pre><code>git init
+git branch -M main
+git add index.html
+git commit -m "Mi primera pagina online"</code></pre>
+    </div>
 
-        <!-- MONITOR DE MERCADO WEB3 -->
-        <section class="widget-section">
-            <div class="section-title">📊 Solana & Crypto Market Stats</div>
-            <div class="crypto-widget">
-                <div class="tradingview-widget-container" style="height:100%;width:100%">
-                    <div id="tradingview_chart" style="height:calc(100% - 32px);width:100%"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                    <script type="text/javascript">
-                    new TradingView.widget({
-                        "autosize": true,
-                        "symbol": "BINANCE:SOLUSDT",
-                        "interval": "60",
-                        "timezone": "Etc/UTC",
-                        "theme": "dark",
-                        "style": "1",
-                        "locale": "es",
-                        "enable_publishing": false,
-                        "hide_side_toolbar": false,
-                        "container_id": "tradingview_chart"
-                    });
-                    </script>
-                </div>
-            </div>
-        </section>
+    <!-- Paso 3 -->
+    <div class="card">
+        <h2><span>3️⃣</span> Conectar y Subir a GitHub</h2>
+        <p>Vingula tu directorio local con GitHub y sube tu código:</p>
+        <pre><code>git remote add origin https://github.com/solochegui/paginaonline.git
+git push -u origin main</code></pre>
+        <p><em>Nota: Introduce tu usuario y usa tu <strong>Personal Access Token (PAT)</strong> de GitHub como contraseña.</em></p>
+    </div>
 
-        <!-- SECCIÓN DE PROYECTOS / ASSETS -->
-        <section>
-            <div class="section-title">⚙️ Ecosystem Assets & Tools</div>
-            <div class="nft-grid">
-                <div class="nft-card legendary">
-                    <span class="rarity-badge badge-genesis">Core Asset</span>
-                    <h3 class="nft-title">BoriCoin Token</h3>
-                    <p class="nft-desc">Proyecto estrella desarrollado en Solana centrado en innovación Web3 e inclusión financiera.</p>
-                    <div class="nft-footer">
-                        <span>Red: Solana</span>
-                        <span>Status: Active</span>
-                    </div>
-                </div>
-
-                <div class="nft-card">
-                    <span class="rarity-badge badge-epic">Metaverse</span>
-                    <h3 class="nft-title">Non Fungible Metaverse</h3>
-                    <p class="nft-desc">Comunidad y hub para compartir educación sobre inversiones, crypto y estrategias avanzadas.</p>
-                    <div class="nft-footer">
-                        <span>Platform: Base</span>
-                        <span>Community Hub</span>
-                    </div>
-                </div>
-
-                <div class="nft-card">
-                    <span class="rarity-badge badge-rare">Automation</span>
-                    <h3 class="nft-title">Termux Bot Suite</h3>
-                    <p class="nft-desc">Scripts optimizados para automatización de trading en Coinbase y Cryptohopper.</p>
-                    <div class="nft-footer">
-                        <span>Environment: Android</span>
-                        <span>Engine: Python</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- Paso 4 -->
+    <div class="card">
+        <h2><span>4️⃣</span> Activar GitHub Pages</h2>
+        <p>Para publicar la web globalmente:</p>
+        <ol>
+            <li>Ve a tu repositorio en GitHub: <code>https://github.com/solochegui/paginaonline</code></li>
+            <li>Entra a <strong>Settings</strong> ➔ <strong>Pages</strong>.</li>
+            <li>En <strong>Branch</strong>, selecciona <code>main</code> y haz clic en <strong>Save</strong>.</li>
+        </ol>
+    </div>
 
     <footer>
-        <p>© 2026 solochegui | Powered by Non Fungible Metaverse & Termux</p>
-        <p>Perfil oficial: <a href="https://github.com/solochegui" target="_blank">github.com/solochegui</a></p>
+        <p>Desarrollado desde Termux por <a href="https://github.com/solochegui" target="_blank">Solochegui</a></p>
     </footer>
+</div>
 
-    <script>
-        const newsItems = [
-            {
-                tag: 'BORICOIN',
-                rarity: 'badge-genesis',
-                rarityText: 'Genesis Drop',
-                cardClass: 'legendary',
-                title: 'BoriCoin impulsa nuevas alianzas en la red Solana',
-                desc: 'Iniciativas estratégicas consolidan el ecosistema de BoriCoin con baja latencia y comisiones mínimas.',
-                source: 'Official Feed',
-                time: 'Hace 5 min'
-            },
-            {
-                tag: 'SOL',
-                rarity: 'badge-epic',
-                rarityText: 'Epic Tier',
-                cardClass: '',
-                title: 'Solana registra volumen récord en ecosistema DeFi',
-                desc: 'La liquidez y velocidad de procesamiento fortalecen la adopción de la red en aplicaciones Web3.',
-                source: 'Solana Floor',
-                time: 'Hace 20 min'
-            },
-            {
-                tag: 'BTC',
-                rarity: 'badge-rare',
-                rarityText: 'Rare Item',
-                cardClass: '',
-                title: 'Bitcoin mantiene estructura alcista en gráficos diarios',
-                desc: 'La acumulación por parte de inversores a largo plazo sostiene los niveles de soporte principales.',
-                source: 'CoinDesk',
-                time: 'Hace 35 min'
-            },
-            {
-                tag: 'ETH',
-                rarity: 'badge-rare',
-                rarityText: 'Rare Item',
-                cardClass: '',
-                title: 'Escalabilidad de Ethereum mejora con nuevas L2',
-                desc: 'Las redes de segunda capa procesan la mayoría de transacciones con costos reducidos.',
-                source: 'Decrypt',
-                time: 'Hace 50 min'
-            }
-        ];
-
-        let currentFilter = 'ALL';
-
-        function renderNewsNFTs() {
-            const container = document.getElementById('news-nft-container');
-            container.innerHTML = '';
-
-            const filtered = currentFilter === 'ALL' 
-                ? newsItems 
-                : newsItems.filter(item => item.tag === currentFilter);
-
-            if(filtered.length === 0) {
-                container.innerHTML = '<p style="color:#64748b; font-size:0.85rem; padding: 10px;">No se encontraron piezas registradas en este filtro.</p>';
-                return;
-            }
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = `nft-card ${item.cardClass}`;
-                card.innerHTML = `
-                    <span class="rarity-badge ${item.rarity}">${item.rarityText}</span>
-                    <h3 class="nft-title">[${item.tag}] ${item.title}</h3>
-                    <p class="nft-desc">${item.desc}</p>
-                    <div class="nft-footer">
-                        <span>Fuente: ${item.source}</span>
-                        <span>${item.time}</span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function filterNFTs(tag, btnElement) {
-            currentFilter = tag;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            renderNewsNFTs();
-        }
-
-        // Carga inicial
-        renderNewsNFTs();
-    </script>
 </body>
 </html>
