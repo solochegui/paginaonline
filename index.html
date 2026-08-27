@@ -3,85 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Federación Galáctica: Bori-System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@600;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>BoriBot Podcast Live 24/7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Open Sans', sans-serif; background-color: #0b0c10; color: #c5c6c7; margin: 0; padding: 20px; text-align: center; }
-        h1 { font-family: 'Bangers', cursive; color: #66fcf1; font-size: 3.2rem; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 10px #45a29e; }
-        .subtitle { font-family: 'Orbitron', sans-serif; color: #45a29e; font-size: 1.1rem; margin-bottom: 30px; }
-        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 1000px; margin: 0 auto; }
-        .card { background: #1f2833; border: 3px solid #66fcf1; border-radius: 12px; box-shadow: 6px 6px 0px #45a29e; padding: 18px; width: 440px; box-sizing: border-box; text-align: left; }
-        .card h2 { font-family: 'Bangers', cursive; color: #ffeaa7; font-size: 1.9rem; margin: 10px 0 10px; text-align: center; letter-spacing: 1px; }
-        .card p { font-size: 0.95rem; line-height: 1.5; color: #c5c6c7; }
-        svg { border: 2px solid #66fcf1; border-radius: 8px; background: #0b0c10; width: 100%; height: auto; }
-        footer { margin-top: 50px; font-weight: bold; color: #c5c6c7; }
-        footer a { color: #66fcf1; text-decoration: none; }
+        body {
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .podcast-stream-card {
+            background-color: #0b0c10;
+            border: 2px solid #66fcf1;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.15);
+        }
+        .stream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1f2833;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .stream-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #66fcf1;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .status-badge {
+            background-color: #ef4444;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+        .feed-container {
+            height: 420px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+        .loading-text {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+        }
+        .broadcast-box {
+            background-color: #1f2833;
+            border-left: 4px solid #eab308;
+            border-radius: 6px;
+            padding: 14px;
+        }
+        .broadcast-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #66fcf1;
+            margin-bottom: 8px;
+        }
+        .broadcast-text {
+            margin: 0 0 12px 0;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .promo-button {
+            display: inline-block;
+            background-color: #eab308;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: 0.2s ease;
+        }
+        .promo-button:hover {
+            background-color: #66fcf1;
+            box-shadow: 0 0 8px #66fcf1;
+        }
     </style>
 </head>
 <body>
-    <h1>FEDERACIÓN GALÁCTICA</h1>
-    <div class="subtitle">Bori-System: La Prueba del Blockchain</div>
 
-    <div class="grid">
-        <!-- Panel 1: Los Protectores -->
-        <div class="card">
-            <h2>Episodio 1: Flaco Flow & Chegüi</h2>
-            <svg viewBox="0 0 400 240">
-                <!-- FLACO FLOW (Izquierda) -->
-                <circle cx="200" cy="120" r="70" fill="none" stroke="#66fcf1" stroke-width="3" stroke-dasharray="6,6"/>
-                <circle cx="200" cy="120" r="45" fill="none" stroke="#45a29e" stroke-width="2"/>
-                
-                <!-- Cadena de Bloques -->
-                <rect x="70" y="105" width="30" height="30" rx="4" fill="#eab308" stroke="#fff"/>
-                <line x1="100" y1="120" x2="155" y2="120" stroke="#66fcf1" stroke-width="3"/>
-                <rect x="290" y="105" width="30" height="30" rx="4" fill="#eab308" stroke="#fff"/>
-                <line x1="245" y1="120" x2="290" y2="120" stroke="#66fcf1" stroke-width="3"/>
-
-                <text x="145" y="124" font-family="Orbitron" font-size="10" font-weight="bold" fill="#ffffff">FEDERACIÓN</text>
-
-                <!-- Bocadillo Central -->
-                <path d="M 200 40 Q 200 10 250 15 Q 300 10 290 45 Z" fill="#fff" stroke="#000" stroke-width="2"/>
-                <text x="210" y="28" font-family="sans-serif" font-size="8" font-weight="bold" fill="#000">¡Libertad Financiera</text>
-                <text x="210" y="38" font-family="sans-serif" font-size="8" font-weight="bold" fill="#000">para la Tierra!</text>
-            </svg>
-            <p><strong>Flaco Flow</strong> (El Rey de BoriCoin) y <strong>Chegüi</strong> (El Maestro de Algoritmos Avanzados) operan el Bori-System. Juntos ejecutan la prueba del dinero para capacitar a los humanos en trading antes de su integración galáctica.</p>
-        </div>
-
-        <!-- Panel 2: La Red del Blockchain Galáctico -->
-        <div class="card">
-            <h2>Episodio 2: La Prueba del Trading</h2>
-            <svg viewBox="0 0 400 240">
-                <!-- Portal de la Federación Galáctica -->
-                <circle cx="200" cy="120" r="70" fill="none" stroke="#66fcf1" stroke-width="3" stroke-dasharray="6,6"/>
-                <circle cx="200" cy="120" r="45" fill="none" stroke="#45a29e" stroke-width="2"/>
-                
-                <!-- Cadena de Bloques -->
-                <rect x="70" y="105" width="30" height="30" rx="4" fill="#eab308" stroke="#fff"/>
-                <line x1="100" y1="120" x2="155" y2="120" stroke="#66fcf1" stroke-width="3"/>
-                <rect x="290" y="105" width="30" height="30" rx="4" fill="#eab308" stroke="#fff"/>
-                <line x1="245" y1="120" x2="290" y2="120" stroke="#66fcf1" stroke-width="3"/>
-
-                <text x="145" y="124" font-family="Orbitron" font-size="10" font-weight="bold" fill="#ffffff">FEDERACIÓN</text>
-
-                <!-- Bocadillo Central -->
-                <path d="M 200 40 Q 200 10 250 15 Q 300 10 290 45 Z" fill="#fff" stroke="#000" stroke-width="2"/>
-                <text x="210" y="28" font-family="sans-serif" font-size="8" font-weight="bold" fill="#000">¡Libertad Financiera</text>
-                <text x="210" y="38" font-family="sans-serif" font-size="8" font-weight="bold" fill="#000">para la Tierra!</text>
-            </svg>
-            <p>Al dominar los algoritmos y entender la tecnología blockchain, los nuevos traders superan la prueba de la Federación Galáctica, alcanzando la libertad financiera y el acceso ilimitado a la red intergaláctica.</p>
-        </div>
-
-        <!-- Podcast Section -->
-        <div class="card">
-            <h2>Podcast</h2>
-            <audio controls>
-                <source src="podcast.mp3" type="audio/mpeg">
-                Tu navegador no soporta el audio.
-            </audio>
-            <p><strong>Listen to the podcast:</strong> <a href="https://example.com/podcast.mp3">Download</a></p>
-        </div>
+<div class="podcast-stream-card">
+    <div class="stream-header">
+        <h3 class="stream-title">🎙️ BORIBOT PODCAST LIVE 24/7</h3>
+        <span class="status-badge">🔴 TRANSMITIENDO CON QWEN</span>
     </div>
 
-    <footer>Desarrollado desde Termux por <a href="https://github.com/solochegui" target="_blank">Solochegui</a></footer>
+    <div id="live-feed" class="feed-container">
+        <p class="loading-text">Conectando a la emisión en tiempo real...</p>
+    </div>
+</div>
+
+<script>
+    let totalItems = 0;
+
+    async function actualizarPodcastLive() {
+        try {
+            const response = await fetch('http://localhost:5000/api/podcast-live');
+            const data = await response.json();
+            
+            const feedContainer = document.getElementById('live-feed');
+            
+            if (data.length > 0 && data.length !== totalItems) {
+                feedContainer.innerHTML = '';
+                
+                data.forEach(item => {
+                    const block = document.createElement('div');
+                    block.className = 'broadcast-box';
+                    block.innerHTML = `
+                        <div class="broadcast-meta">
+                            <strong>🤖 BoriBot (Qwen AI Host)</strong>
+                            <span>${item.time}</span>
+                        </div>
+                        <p class="broadcast-text">${item.text}</p>
+                        <a href="${item.link}" target="_blank" class="promo-button">
+                            🚀 Ver Algoritmo BoriSystem en Gumroad
+                        </a>
+                    `;
+                    feedContainer.appendChild(block);
+                });
+                
+                feedContainer.scrollTop = feedContainer.scrollHeight;
+                totalItems = data.length;
+            }
+        } catch (error) {
+            console.error('Error conectando con la transmisión:', error);
+        }
+    }
+
+    setInterval(actualizarPodcastLive, 4000);
+    actualizarPodcastLive();
+</script>
+
 </body>
 </html>
