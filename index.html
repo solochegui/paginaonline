@@ -5,109 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informante | Panel en Vivo</title>
     <style>
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            color: #38bdf8;
-            margin: 0 0 5px 0;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge {
-            background-color: #22c55e;
-            color: #0f172a;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 3px 10px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        #feed-container {
-            width: 100%;
-            max-width: 650px;
-            height: 480px;
-            overflow-y: auto;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-
-        .info-card {
-            background: #0f172a;
-            border-left: 4px solid #38bdf8;
-            padding: 10px 14px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
-
-        .info-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-
-        .info-text {
-            font-size: 0.85rem;
-            line-height: 1.35;
-            color: #cbd5e1;
-            margin: 0 0 8px 0;
-            white-space: pre-line;
-        }
-
-        .action-link {
-            display: inline-block;
-            font-size: 0.75rem;
-            color: #38bdf8;
-            text-decoration: none;
-            border: 1px solid #38bdf8;
-            padding: 3px 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .action-link:hover {
-            background: #38bdf8;
-            color: #0f172a;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-top: 200px;
-        }
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        header { text-align: center; margin-bottom: 15px; }
+        h1 { font-size: 1.4rem; color: #38bdf8; margin: 0 0 5px 0; }
+        .status-badge { background-color: #22c55e; color: #0f172a; font-size: 0.75rem; font-weight: bold; padding: 3px 10px; border-radius: 12px; display: inline-block; }
+        #feed-container { width: 100%; max-width: 650px; height: 480px; overflow-y: auto; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; }
+        .info-card { background: #0f172a; border-left: 4px solid #38bdf8; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .info-header { display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; }
+        .info-text { font-size: 0.85rem; color: #cbd5e1; margin: 8px 0; }
+        .action-link { font-size: 0.75rem; color: #38bdf8; text-decoration: none; border: 1px solid #38bdf8; padding: 3px 8px; border-radius: 4px; display: inline-block; }
     </style>
 </head>
 <body>
-
     <header>
         <h1>📢 Informante</h1>
         <span class="status-badge" id="status-tag">● EN LINEA</span>
     </header>
 
-    <div id="feed-container">
-        <div class="empty-state">Conectando con Informante...</div>
-    </div>
+    <div id="feed-container"></div>
 
 <script>
     let totalItems = 0;
@@ -115,14 +30,13 @@
     async function cargarInformacion() {
         try {
             const res = await fetch('/api/feed');
-            if (!res.ok) throw new Error("Error de red");
+            if (!res.ok) throw new Error("Error");
             
             const data = await res.json();
             const container = document.getElementById('feed-container');
 
             if (data.length !== totalItems) {
                 container.innerHTML = '';
-
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'info-card';
@@ -132,22 +46,17 @@
                             <span>${item.time}</span>
                         </div>
                         <p class="info-text">${item.text}</p>
-                        <a href="${item.link}" target="_blank" class="action-link">
-                            🔗 Ver enlace relacionado
-                        </a>
+                        <a href="${item.link}" target="_blank" class="action-link">🔗 Ver enlace</a>
                     `;
                     container.appendChild(card);
                 });
-
                 container.scrollTop = container.scrollHeight;
                 totalItems = data.length;
             }
 
             document.getElementById('status-tag').style.backgroundColor = '#22c55e';
             document.getElementById('status-tag').innerText = '● EN LINEA';
-
         } catch (err) {
-            console.error('Error al actualizar feed:', err);
             document.getElementById('status-tag').style.backgroundColor = '#ef4444';
             document.getElementById('status-tag').innerText = '○ DESCONECTADO';
         }
