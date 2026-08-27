@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía: Mi Página Online con Termux y GitHub</title>
+    <title>Music Page</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -41,60 +41,54 @@
             font-size: 2rem;
             margin-bottom: 10px;
         }
+
+        .music-section {
+            padding: 20px;
+            border-top: 1px solid #334155;
+        }
+
+        .song-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .song-item {
+            margin-bottom: 10px;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .song-title {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .song-artist {
+            color: var(--muted-text);
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>🚀 Cómo Publicar tu Página Web Gratis</h1>
-        <p class="subtitle">Guía rápida utilizando <strong>Termux</strong> y <strong>GitHub Pages</strong></p>
+        <h1>Music Page</h1>
     </header>
 
-    <!-- Paso 1 -->
-    <div class="card">
-        <h2><span>1️⃣</span> Crear el Repositorio en GitHub</h2>
-        <p>Abre GitHub en tu navegador y crea un nuevo repositorio público para alojar tu proyecto.</p>
-        <ul>
-            <li>Nombre del repositorio: <code>paginaonline</code></li>
-            <li>Visibilidad: <strong>Public</strong></li>
-            <li>Haz clic en el botón azul <strong>Create repository</strong>.</li>
+    <div class="music-section">
+        <h2>Song List</h2>
+        <ul class="song-list">
+            <li class="song-item">
+                <div class="song-title">Song 1</div>
+                <div class="song-artist">Artist 1</div>
+            </li>
+            <li class="song-item">
+                <div class="song-title">Song 2</div>
+                <div class="song-artist">Artist 2</div>
+            </li>
+            <!-- Add more song items as needed -->
         </ul>
-    </div>
-
-    <!-- Paso 2 -->
-    <div class="card">
-        <h2><span>2️⃣</span> Configurar e Inicializar en Termux</h2>
-        <p>Abre Termux en tu Android, crea tu carpeta de trabajo y genera el archivo principal <code>index.html</code>:</p>
-        <pre><code>cd ~
-mkdir misitio
-cd misitio
-nano index.html</code></pre>
-        <p>Guarda el archivo en nano (<code>CTRL + o</code>, <code>Enter</code>, <code>CTRL + x</code>) e inicializa el repositorio:</p>
-        <pre><code>git init
-git branch -M main
-git add index.html
-git commit -m "Mi primera pagina online"</code></pre>
-    </div>
-
-    <!-- Paso 3 -->
-    <div class="card">
-        <h2><span>3️⃣</span> Conectar y Subir a GitHub</h2>
-        <p>Vingula tu directorio local con GitHub y sube tu código:</p>
-        <pre><code>git remote add origin https://github.com/solochegui/paginaonline.git
-git push -u origin main</code></pre>
-        <p><em>Nota: Introduce tu usuario y usa tu <strong>Personal Access Token (PAT)</strong> de GitHub como contraseña.</em></p>
-    </div>
-
-    <!-- Paso 4 -->
-    <div class="card">
-        <h2><span>4️⃣</span> Activar GitHub Pages</h2>
-        <p>Para publicar la web globalmente:</p>
-        <ol>
-            <li>Ve a tu repositorio en GitHub: <code>https://github.com/solochegui/paginaonline</code></li>
-            <li>Entra a <strong>Settings</strong> ➔ <strong>Pages</strong>.</li>
-            <li>En <strong>Branch</strong>, selecciona <code>main</code> y haz clic en <strong>Save</strong>.</li>
-        </ol>
     </div>
 
     <footer>
