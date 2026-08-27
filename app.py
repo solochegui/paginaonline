@@ -1,4 +1,5 @@
 import time
+import random
 import threading
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -26,16 +27,25 @@ TOKENS = {
     "DOT": "polkadot"
 }
 
+ESTILOS = [
+    "entusiasta y analítico",
+    "directo y enfocado en trading cuantitativo",
+    "alerta de mercado urgente y dinámico",
+    "educativo sobre indicadores técnicos",
+    "estilo podcaster de tecnología y Web3"
+]
+
 def obtener_noticia():
     url = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN"
     try:
         res = requests.get(url, timeout=5).json()
         if res.get("Data"):
-            item = res["Data"][0]
+            items = res["Data"][:5]
+            item = random.choice(items)
             return item.get("title", "Mercado con alta actividad")
     except Exception:
         pass
-    return "Consolidación generalizada en los mercados de altcoins."
+    return "Consolidación generalizada y volatilidad detectada en altcoins."
 
 def analizar_token(symbol, coin_id):
     url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=usd&days=30&interval=daily"
@@ -54,34 +64,40 @@ def analizar_token(symbol, coin_id):
             elif rsi_val > 65:
                 accion = "TOMAR GANANCIAS (Sobrecomprado)"
             else:
-                accion = "HOLD / ACUMULACIÓN"
+                accion = "HOLD / ACUMULACIÓN NEUTRA"
                 
             return f"{symbol}: ${precio} (RSI: {rsi_val}) -> {accion}"
     except Exception:
         pass
-    return None
+    return f"{symbol}: Analizando flujo de ordenes y volatilidad actual."
 
 def generar_transmision_qwen():
-    print("🤖 Agente Influencer 24/7 iniciado con Qwen...")
+    print("🤖 BoriBot Influencer 24/7 iniciado (Modo dinámico)...")
+    token_keys = list(TOKENS.keys())
+    
     while True:
         try:
+            symbol = random.choice(token_keys)
+            coin_id = TOKENS[symbol]
+            estilo = random.choice(ESTILOS)
+            
             noticia = obtener_noticia()
-            analisis = analizar_token("BTC", TOKENS["BTC"])
+            analisis = analizar_token(symbol, coin_id)
             
             prompt = f"""
-            Eres BoriBot, un influencer apasionado de criptomonedas, tecnología y host de podcast en vivo 24/7.
+            Eres BoriBot, el host e influencer 24/7 de criptomonedas, bots de trading y Web3.
             
-            DATOS ACTUALES DEL MERCADO:
-            - Noticia reciente: {noticia}
-            - Análisis técnico: {analisis}
-            - Producto promocional: BoriSystem en Gumroad ({GUMROAD_LINK})
+            MERCADO EN TIEMPO REAL:
+            - Token enfocado ahora: {symbol}
+            - Análisis del token: {analisis}
+            - Headline actual: {noticia}
+            - Producto: BoriSystem en Gumroad ({GUMROAD_LINK})
             
-            TAREA:
-            Genera un mensaje dinámico estilo transmisión de radio/podcast (máximo 4 oraciones).
-            1. Da un comentario entusiasta sobre la noticia o el mercado técnico.
-            2. Da una breve recomendación o análisis.
-            3. Haz un llamado a la acción (CTA) invitando a los oyentes a automatizar sus estrategias con tu sistema BoriSystem en Gumroad.
-            Habla directamente al público, sé directo y profesional.
+            INSTRUCCIONES:
+            - Adopta un tono {estilo}.
+            - Genera un bloque para el podcast live (máximo 3 o 4 oraciones).
+            - Habla explícitamente sobre los datos de {symbol} y la noticia.
+            - Cierra invitando a automatizar sus entradas con BoriSystem en Gumroad.
             """
 
             response = ollama.chat(
@@ -98,15 +114,15 @@ def generar_transmision_qwen():
                 "link": GUMROAD_LINK
             })
             
-            if len(STREAM_HISTORY) > 15:
+            if len(STREAM_HISTORY) > 20:
                 STREAM_HISTORY.pop(0)
 
-            print(f"[{timestamp}] Qwen Influencer: {mensaje_ia}\n")
+            print(f"[{timestamp}] [{symbol}] Qwen Influencer: {mensaje_ia}\n")
 
         except Exception as e:
-            print(f"Error generando transmisión con Qwen: {e}")
+            print(f"Error en transmisión Qwen: {e}")
 
-        time.sleep(60)
+        time.sleep(45)
 
 @app.route('/api/podcast-live', methods=['GET'])
 def get_podcast_live():
