@@ -1,116 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historical Stories</title>
+    <title>Historias en Cómic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f4f4f4;
-            --card-bg: #fff;
-            --accent-color: #38bdf8;
-            --text-color: #2c3e50;
-            --muted-text: #94a3b8;
-            --code-bg: #090d16;
-            --green-accent: #4ade80;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 20px 15px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #334155;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: var(--accent-color);
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .gallery-section {
-            padding: 20px;
-            border-top: 1px solid #334155;
-        }
-
-        .gallery-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: var(--card-bg);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .gallery-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .gallery-item h2 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .gallery-item p {
-            color: var(--muted-text);
-        }
+        body { font-family: 'Open Sans', sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; text-align: center; }
+        h1 { font-family: 'Bangers', cursive; color: #0088cc; font-size: 3rem; letter-spacing: 2px; }
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 900px; margin: 0 auto; }
+        .card { background: white; border: 4px solid #000; border-radius: 12px; box-shadow: 8px 8px 0px #000; padding: 15px; width: 320px; box-sizing: border-box; }
+        .card h2 { font-family: 'Bangers', cursive; font-size: 1.8rem; margin: 10px 0 5px; }
+        svg { border: 3px solid #000; border-radius: 8px; background: #fff; width: 100%; height: auto; }
+        footer { margin-top: 40px; font-weight: bold; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <h1>Historical Stories</h1>
-    </header>
-
-    <div class="gallery-section">
-        <h2>Song List</h2>
-        <ul class="song-list">
-            <li class="song-item">
-                <div class="gallery-item">
-                    <img src="path/to/image1.jpg" alt="Story 1">
-                    <div class="gallery-item-content">
-                        <h2>Story 1</h2>
-                        <p>Description of Story 1</p>
-                    </div>
-                </div>
-            </li>
-            <li class="song-item">
-                <div class="gallery-item">
-                    <img src="path/to/image2.jpg" alt="Story 2">
-                    <div class="gallery-item-content">
-                        <h2>Story 2</h2>
-                        <p>Description of Story 2</p>
-                    </div>
-                </div>
-            </li>
-            <!-- Add more gallery items as needed -->
-        </ul>
+    <h1>Historical Stories</h1>
+    <div class="grid">
+        <div class="card">
+            <h2>Story 1</h2>
+            <svg viewBox="0 0 300 200">
+                <rect width="300" height="200" fill="#ffeaa7"/>
+                <circle cx="150" cy="130" r="40" fill="#ff7675"/>
+                <circle cx="150" cy="80" r="25" fill="#fdcb6e"/>
+                <path d="M 170 60 Q 230 30 220 70 Q 210 90 175 75 Z" fill="white" stroke="black" stroke-width="2"/>
+                <text x="182" y="62" font-family="sans-serif" font-size="10" font-weight="bold" fill="black">¡Aider en</text>
+                <text x="182" y="74" font-family="sans-serif" font-size="10" font-weight="bold" fill="black">acción!</text>
+            </svg>
+            <p>Descripción de la Historia 1</p>
+        </div>
+        <div class="card">
+            <h2>Story 2</h2>
+            <svg viewBox="0 0 300 200">
+                <rect width="300" height="200" fill="#74b9ff"/>
+                <polygon points="150,40 180,140 120,140" fill="#a29bfe" stroke="black" stroke-width="2"/>
+                <path d="M 130 50 Q 70 20 80 60 Q 90 80 125 65 Z" fill="white" stroke="black" stroke-width="2"/>
+                <text x="82" y="52" font-family="sans-serif" font-size="10" font-weight="bold" fill="black">¡Código SVG</text>
+                <text x="82" y="64" font-family="sans-serif" font-size="10" font-weight="bold" fill="black">generado!</text>
+            </svg>
+            <p>Descripción de la Historia 2</p>
+        </div>
     </div>
-
-    <footer>
-        <p>Desarrollado desde Termux por <a href="https://github.com/solochegui" target="_blank">Solochegui</a></p>
-    </footer>
-</div>
-
+    <footer>Desarrollado desde Termux por <a href="https://github.com/solochegui">Solochegui</a></footer>
 </body>
 </html>
