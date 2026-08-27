@@ -3,67 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informante | Panel en Vivo</title>
+    <title>BoriBot Podcast Live 24/7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        header { text-align: center; margin-bottom: 15px; }
-        h1 { font-size: 1.4rem; color: #38bdf8; margin: 0 0 5px 0; }
-        .status-badge { background-color: #22c55e; color: #0f172a; font-size: 0.75rem; font-weight: bold; padding: 3px 10px; border-radius: 12px; display: inline-block; }
-        #feed-container { width: 100%; max-width: 650px; height: 480px; overflow-y: auto; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; }
-        .info-card { background: #0f172a; border-left: 4px solid #38bdf8; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
-        .info-header { display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; }
-        .info-text { font-size: 0.85rem; color: #cbd5e1; margin: 8px 0; }
-        .action-link { font-size: 0.75rem; color: #38bdf8; text-decoration: none; border: 1px solid #38bdf8; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        body {
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .podcast-stream-card {
+            background-color: #0b0c10;
+            border: 2px solid #66fcf1;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.15);
+        }
+        .stream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1f2833;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .stream-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #66fcf1;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .status-badge {
+            background-color: #ef4444;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #1f2833;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        .audio-btn {
+            background-color: #66fcf1;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .feed-container {
+            height: 420px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+        .loading-text {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+        }
+        .broadcast-box {
+            background-color: #1f2833;
+            border-left: 4px solid #eab308;
+            border-radius: 6px;
+            padding: 14px;
+        }
+        .broadcast-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #66fcf1;
+            margin-bottom: 8px;
+        }
+        .broadcast-text {
+            margin: 0 0 12px 0;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .promo-button {
+            display: inline-block;
+            background-color: #eab308;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: 0.2s ease;
+        }
+        .promo-button:hover {
+            background-color: #66fcf1;
+            box-shadow: 0 0 8px #66fcf1;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>📢 Informante</h1>
-        <span class="status-badge" id="status-tag">● EN LINEA</span>
-    </header>
 
-    <div id="feed-container"></div>
+<div class="podcast-stream-card">
+    <div class="stream-header">
+        <h3 class="stream-title">🎙️ BORIBOT PODCAST LIVE 24/7</h3>
+        <span class="status-badge">🔴 TRANSMITIENDO CON QWEN</span>
+    </div>
+
+    <div class="controls-bar">
+        <span id="audio-status" style="font-size: 0.85rem;">🔊 Audio: Desactivado</span>
+        <button id="toggle-audio" class="audio-btn" onclick="toggleAudio()">Activar Voz IA</button>
+    </div>
+
+    <div id="live-feed" class="feed-container">
+        <p class="loading-text">Conectando a la emisión en tiempo real...</p>
+    </div>
+</div>
 
 <script>
     let totalItems = 0;
+    let audioActivo = false;
+    let synth = window.speechSynthesis;
+    let ultimoTextoLeido = "";
 
-    async function cargarInformacion() {
-        try {
-            const res = await fetch('/api/feed');
-            if (!res.ok) throw new Error("Error");
-            
-            const data = await res.json();
-            const container = document.getElementById('feed-container');
-
-            if (data.length !== totalItems) {
-                container.innerHTML = '';
-                data.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'info-card';
-                    card.innerHTML = `
-                        <div class="info-header">
-                            <strong>📌 Reporte #${item.id}</strong>
-                            <span>${item.time}</span>
-                        </div>
-                        <p class="info-text">${item.text}</p>
-                        <a href="${item.link}" target="_blank" class="action-link">🔗 Ver enlace</a>
-                    `;
-                    container.appendChild(card);
-                });
-                container.scrollTop = container.scrollHeight;
-                totalItems = data.length;
-            }
-
-            document.getElementById('status-tag').style.backgroundColor = '#22c55e';
-            document.getElementById('status-tag').innerText = '● EN LINEA';
-        } catch (err) {
-            document.getElementById('status-tag').style.backgroundColor = '#ef4444';
-            document.getElementById('status-tag').innerText = '○ DESCONECTADO';
+    function toggleAudio() {
+        audioActivo = !audioActivo;
+        const btn = document.getElementById('toggle-audio');
+        const status = document.getElementById('audio-status');
+        
+        if (audioActivo) {
+            btn.innerText = "Desactivar Voz";
+            btn.style.backgroundColor = "#ef4444";
+            btn.style.color = "#fff";
+            status.innerText = "🔊 Audio: EN VIVO";
+            // Habla inmediatamente el último mensaje cargado
+            if (ultimoTextoLeido) hablar(ultimoTextoLeido);
+        } else {
+            btn.innerText = "Activar Voz IA";
+            btn.style.backgroundColor = "#66fcf1";
+            btn.style.color = "#000";
+            status.innerText = "🔊 Audio: Desactivado";
+            synth.cancel();
         }
     }
 
-    setInterval(cargarInformacion, 3000);
-    cargarInformacion();
+    function hablar(texto) {
+        if (!audioActivo || !('speechSynthesis' in window)) return;
+        
+        synth.cancel(); // Cancelar lecturas previas pendientes
+        
+        // Limpiar el texto para que la voz no lea enlaces o código
+        let textoLimpio = texto.replace(/https?:\/\/\S+/g, '');
+        
+        let utterance = new SpeechSynthesisUtterance(textoLimpio);
+        utterance.lang = 'es-ES'; // Idioma español
+        utterance.rate = 1.0;     // Velocidad de locución
+        utterance.pitch = 1.0;    // Tono de voz
+
+        // Intentar seleccionar una voz masculina/neutra en español disponible
+        let voces = synth.getVoices();
+        let vozEspanol = voces.find(v => v.lang.startsWith('es'));
+        if (vozEspanol) utterance.voice = vozEspanol;
+
+        synth.speak(utterance);
+    }
+
+    async function actualizarPodcastLive() {
+        try {
+            const response = await fetch('http://localhost:5000/api/podcast-live');
+            const data = await response.json();
+            
+            const feedContainer = document.getElementById('live-feed');
+            
+            if (data.length > 0 && data.length !== totalItems) {
+                feedContainer.innerHTML = '';
+                
+                data.forEach(item => {
+                    const block = document.createElement('div');
+                    block.className = 'broadcast-box';
+                    block.innerHTML = `
+                        <div class="broadcast-meta">
+                            <strong>🤖 BoriBot (Qwen AI Host)</strong>
+                            <span>${item.time}</span>
+                        </div>
+                        <p class="broadcast-text">${item.text}</p>
+                        <a href="${item.link}" target="_blank" class="promo-button">
+                            🚀 Ver Algoritmo BoriSystem en Gumroad
+                        </a>
+                    `;
+                    feedContainer.appendChild(block);
+                });
+                
+                feedContainer.scrollTop = feedContainer.scrollHeight;
+                totalItems = data.length;
+
+                // Obtener el nuevo mensaje y enviarlo al lector de voz
+                const nuevoMensaje = data[data.length - 1].text;
+                if (nuevoMensaje !== ultimoTextoLeido) {
+                    ultimoTextoLeido = nuevoMensaje;
+                    hablar(nuevoMensaje);
+                }
+            }
+        } catch (error) {
+            console.error('Error conectando con la transmisión:', error);
+        }
+    }
+
+    // Inicializar voces del navegador
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => { synth.getVoices(); };
+    }
+
+    setInterval(actualizarPodcastLive, 4000);
+    actualizarPodcastLive();
 </script>
+
 </body>
 </html>
