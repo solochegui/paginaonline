@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Page</title>
+    <title>Historical Stories</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
+            --bg-color: #f4f4f4;
+            --card-bg: #fff;
             --accent-color: #38bdf8;
-            --text-color: #f8fafc;
+            --text-color: #2c3e50;
             --muted-text: #94a3b8;
             --code-bg: #090d16;
             --green-accent: #4ade80;
@@ -42,29 +42,35 @@
             margin-bottom: 10px;
         }
 
-        .music-section {
+        .gallery-section {
             padding: 20px;
             border-top: 1px solid #334155;
         }
 
-        .song-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .song-item {
-            margin-bottom: 10px;
-            background-color: var(--card-bg);
+        .gallery-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
             padding: 20px;
             border-radius: 8px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .song-title {
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .gallery-item h2 {
             font-size: 1.5rem;
             margin-bottom: 5px;
         }
 
-        .song-artist {
+        .gallery-item p {
             color: var(--muted-text);
         }
     </style>
@@ -73,21 +79,31 @@
 
 <div class="container">
     <header>
-        <h1>Music Page</h1>
+        <h1>Historical Stories</h1>
     </header>
 
-    <div class="music-section">
+    <div class="gallery-section">
         <h2>Song List</h2>
         <ul class="song-list">
             <li class="song-item">
-                <div class="song-title">Song 1</div>
-                <div class="song-artist">Artist 1</div>
+                <div class="gallery-item">
+                    <img src="path/to/image1.jpg" alt="Story 1">
+                    <div class="gallery-item-content">
+                        <h2>Story 1</h2>
+                        <p>Description of Story 1</p>
+                    </div>
+                </div>
             </li>
             <li class="song-item">
-                <div class="song-title">Song 2</div>
-                <div class="song-artist">Artist 2</div>
+                <div class="gallery-item">
+                    <img src="path/to/image2.jpg" alt="Story 2">
+                    <div class="gallery-item-content">
+                        <h2>Story 2</h2>
+                        <p>Description of Story 2</p>
+                    </div>
+                </div>
             </li>
-            <!-- Add more song items as needed -->
+            <!-- Add more gallery items as needed -->
         </ul>
     </div>
 
