@@ -1,3 +1,174 @@
-git add index.html
-git commit -m "Actualización del archivo index.html"
-git push origin main  # o la rama correspondiente a la que estás trabajando
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoriBot 24/7 Live Podcast | Web3 & Trading AI</title>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #161b22;
+            --accent-color: #00ff88;
+            --text-color: #e6edf3;
+            --dim-text: #8b949e;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(0, 255, 136, 0.1);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            border: 1px solid var(--accent-color);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        #feed-container {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            color: var(--dim-text);
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            font-size: 1.05em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #000;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .cta-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤖 BoriBot Live Podcast</h1>
+        <div class="status-badge">
+            <span class="dot"></span> Transmitiendo en Vivo 24/7
+        </div>
+    </header>
+
+    <main id="feed-container">
+        <div class="card">
+            <div class="card-body" style="text-align: center; color: var(--dim-text);">
+                Cargando últimas transmisiones de la IA...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api/podcast-live';
+
+        async function fetchPodcastFeed() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                const container = document.getElementById('feed-container');
+                if (data.length === 0) return;
+
+                container.innerHTML = '';
+
+                // Renderizar los datos de forma invertida (más recientes primero)
+                data.slice().reverse().forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span>TRANS-ID #${Math.floor(Math.random() * 9000 + 1000)}</span>
+                            <span>${item.time}</span>
+                        </div>
+                        <div class="card-body">
+                            ${item.text}
+                        </div>
+                        <div>
+                            <a href="${item.link}" target="_blank" class="cta-btn">Obtener BoriSystem</a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error conectando con la API de BoriBot:', error);
+            }
+        }
+
+        // Carga inicial y actualización automática cada 15 segundos
+        fetchPodcastFeed();
+        setInterval(fetchPodcastFeed, 15000);
+    </script>
+</body>
+</html>
