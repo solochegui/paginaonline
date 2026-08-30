@@ -9,11 +9,14 @@ import pandas as pd
 import requests
 import ta
 import ollama
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)
 
-# Variables de configuración global
+# Cargar variables de entorno desde .env
+load_dotenv()
+
 GUMROAD_LINK = os.getenv("GUMROAD_LINK", "https://nonfungiblemetaverse.gumroad.com/l/borisystem")
 MODEL_NAME = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b")
 STREAM_HISTORY = []
@@ -57,7 +60,7 @@ def obtener_noticia():
             if title is not None and title.text:
                 return title.text
     except Exception as e:
-        print(f"[WARN] Error consultando noticias RSS: {e}")
+        app.logger.error(f"[WARN] Error consultando noticias RSS: {e}")
     return "Consolidación generalizada y volatilidad detectada en altcoins."
 
 def analizar_token(symbol, coin_id):
@@ -85,12 +88,12 @@ def analizar_token(symbol, coin_id):
 
             return f"{symbol}: ${precio} (RSI: {rsi_val}) -> {accion}"
     except requests.exceptions.RequestException as e:
-        print(f"[WARN] Error analizando token {symbol}: {e}")
+        app.logger.error(f"[WARN] Error analizando token {symbol}: {e}")
     return f"{symbol}: Analizando flujo de ordenes y volatilidad actual."
 
 def generar_transmision_qwen():
     """Hilo en segundo plano que consulta Ollama y mantiene el buffer del podcast."""
-    print(f"🤖 BoriBot Influencer 24/7 iniciado activando modelo {MODEL_NAME}...")
+    app.logger.info(f"🤖 BoriBot Influencer 24/7 iniciado activando modelo {MODEL_NAME}...")
     token_keys = list(TOKENS.keys())
 
     while True:
@@ -135,10 +138,10 @@ def generar_transmision_qwen():
             if len(STREAM_HISTORY) > MAX_HISTORY_SIZE:
                 STREAM_HISTORY.pop(0)
 
-            print(f"[{timestamp}] [{symbol}] Influencer Live: {mensaje_ia}\n")
+            app.logger.info(f"[{timestamp}] [{symbol}] Influencer Live: {mensaje_ia}\n")
 
         except Exception as e:
-            print(f"[ERROR] En transmisión de IA: {e}")
+            app.logger.error(f"[ERROR] En transmisión de IA: {e}")
 
         time.sleep(45)
 
