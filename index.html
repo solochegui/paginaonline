@@ -46,6 +46,7 @@
             border-radius: 20px;
             font-size: 0.9em;
             border: 1px solid var(--accent-color);
+            margin-bottom: 15px;
         }
 
         .dot {
@@ -60,6 +61,23 @@
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.4; transform: scale(1.2); }
             100% { opacity: 1; transform: scale(1); }
+        }
+
+        .voice-btn {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .voice-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
         }
 
         /* --- CARA ANIMADA CYBERPUNK --- */
@@ -176,6 +194,8 @@
         <div class="status-badge">
             <span class="dot"></span> Transmitiendo en Vivo 24/7
         </div>
+        <br>
+        <button class="voice-btn" id="enableAudioBtn" onclick="enableAudio()">🔊 Activar Narradora en Vivo</button>
     </header>
 
     <!-- Avatar Animado -->
@@ -199,29 +219,61 @@
         const API_URL = 'http://localhost:5000/api/podcast-live';
         let lastSpokenTime = "";
         let femaleVoice = null;
+        let audioAllowed = false;
 
-        // Cargar voces del navegador y filtrar voz de mujer en español
+        // Permite la reproducción automática al interactuar con el botón
+        function enableAudio() {
+            audioAllowed = true;
+            const btn = document.getElementById('enableAudioBtn');
+            btn.innerText = "🎙️ Voz Activa";
+            btn.style.backgroundColor = "var(--accent-color)";
+            btn.style.color = "#000";
+            
+            // Cargar y probar voz sintética
+            loadVoices();
+            speakText("Voz femenina activada correctamente. Sintonizando BoriBot.");
+        }
+
+        // Cargar voces del navegador con filtrado prioritario femenino
         function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
             const voices = window.speechSynthesis.getVoices();
-            femaleVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Female') || v.name.includes('Helena') || v.name.includes('Sabina') || v.name.includes('Laura') || v.name.includes('Google español') || v.name.includes('Monica')));
+            
+            // Búsqueda exhaustiva de perfiles femeninos en español
+            femaleVoice = voices.find(v => 
+                v.lang.startsWith('es') && 
+                (v.name.includes('Female') || 
+                 v.name.includes('Helena') || 
+                 v.name.includes('Sabina') || 
+                 v.name.includes('Laura') || 
+                 v.name.includes('Monica') || 
+                 v.name.includes('Francisca') ||
+                 v.name.includes('Paulina') ||
+                 v.name.includes('Victoria') ||
+                 v.name.includes('Google español'))
+            );
+
             if (!femaleVoice) {
                 femaleVoice = voices.find(v => v.lang.startsWith('es'));
             }
         }
 
-        window.speechSynthesis.onvoiceschanged = loadVoices;
+        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
         loadVoices();
 
         // Narrar texto y sincronizar gesticulación del avatar
         function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
+            if (!('speechSynthesis' in window) || !audioAllowed) return;
 
             window.speechSynthesis.cancel(); // Cancelar lecturas previas
 
             const utterance = new SpeechSynthesisUtterance(text);
             if (femaleVoice) utterance.voice = femaleVoice;
-            utterance.rate = 1.0;
-            utterance.pitch = 1.1; // Tono ligeramente más agudo para voz femenina
+            
+            utterance.rate = 0.95; // Cadencia de lectura clara
+            utterance.pitch = 1.25; // Tono agudo femenino
 
             const avatar = document.getElementById('botAvatar');
 
