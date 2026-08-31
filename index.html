@@ -221,6 +221,9 @@
         let femaleVoice = null;
         let audioAllowed = false;
 
+        // Recuperar historial guardado previamente en el navegador
+        let podcastHistory = JSON.parse(localStorage.getItem('boribot_history')) || [];
+
         // Permite la reproducción automática al interactuar con el botón
         function enableAudio() {
             audioAllowed = true;
@@ -292,48 +295,78 @@
             window.speechSynthesis.speak(utterance);
         }
 
+        function saveAndRenderHistory(apiData) {
+            let hasNewEntry = false;
+
+            apiData.forEach(item => {
+                // Verificar si la transmisión ya existe en el historial por su timestamp y texto
+                const exists = podcastHistory.some(h => h.time === item.time && h.text === item.text);
+                if (!exists) {
+                    podcastHistory.unshift(item); // Agregar al inicio
+                    hasNewEntry = true;
+                }
+            });
+
+            if (hasNewEntry) {
+                // Guardar en el almacenamiento local del navegador
+                localStorage.setItem('boribot_history', JSON.stringify(podcastHistory));
+            }
+
+            renderFeed();
+        }
+
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            if (podcastHistory.length === 0) return;
+
+            container.innerHTML = '';
+
+            podcastHistory.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span>TRANS-ID #${9000 - index}</span>
+                        <span>${item.time}</span>
+                    </div>
+                    <div class="card-body">
+                        ${item.text}
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <a href="${item.link}" target="_blank" class="cta-btn">🔗 Ver Promoción / Oferta</a>
+                        <button onclick="deleteEntry(${index})" style="background:transparent; border:1px solid #ff4444; color:#ff4444; border-radius:4px; cursor:pointer;">🗑️ Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Narrar únicamente el mensaje más reciente si no se ha reproducido antes
+            if (podcastHistory.length > 0 && podcastHistory[0].time !== lastSpokenTime) {
+                lastSpokenTime = podcastHistory[0].time;
+                speakText(podcastHistory[0].text);
+            }
+        }
+
+        function deleteEntry(index) {
+            podcastHistory.splice(index, 1);
+            localStorage.setItem('boribot_history', JSON.stringify(podcastHistory));
+            renderFeed();
+        }
+
         async function fetchPodcastFeed() {
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                
-                const container = document.getElementById('feed-container');
-                if (!data || data.length === 0) return;
-
-                container.innerHTML = '';
-
-                // Renderizar las transmisiones en el feed (más recientes primero)
-                data.slice().reverse().forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <span>TRANS-ID #${Math.floor(Math.random() * 9000 + 1000)}</span>
-                            <span>${item.time}</span>
-                        </div>
-                        <div class="card-body">
-                            ${item.text}
-                        </div>
-                        <div>
-                            <a href="${item.link}" target="_blank" class="cta-btn">Obtener BoriSystem</a>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-
-                // Detectar si hay un nuevo mensaje publicado para narrarlo
-                const latestEntry = data[data.length - 1];
-                if (latestEntry && latestEntry.time !== lastSpokenTime) {
-                    lastSpokenTime = latestEntry.time;
-                    speakText(latestEntry.text);
+                if (data && data.length > 0) {
+                    saveAndRenderHistory(data);
                 }
-
             } catch (error) {
                 console.error('Error conectando con la API de BoriBot:', error);
             }
         }
 
-        // Carga inicial y actualización constante cada 10 segundos
+        // Carga inicial (renderizar lo guardado previamente) y monitoreo cada 10s
+        renderFeed();
         fetchPodcastFeed();
         setInterval(fetchPodcastFeed, 10000);
     </script>
